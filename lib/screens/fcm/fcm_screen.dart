@@ -1,129 +1,3 @@
-import 'package:flutter/material.dart';
-
-class FcmScreen extends StatefulWidget {
-  const FcmScreen({super.key});
-
-  @override
-  State<FcmScreen> createState() => _FcmScreenState();
-}
-
-class _FcmScreenState extends State<FcmScreen> {
-  final String _mockToken =
-      'd8A_x2o9SqKz1R...yW9oPzL9T2mN4oPqR7sT8uV9wX0yZ1a2b3c4d5e6';
-  bool _isPermissionGranted = false;
-  final List<String> _notifications = [];
-
-  void _simulateIncomingNotification() {
-    setState(() {
-      _notifications.insert(
-        0,
-        'Notificación de prueba recibida a las ${DateTime.now().toLocal()}',
-      );
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Firebase Messaging (FCM)')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Firebase Cloud Messaging (FCM)',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Aquí configuraremos FCM para recibir notificaciones push en primer plano (foreground) y segundo plano (background).',
-              style: TextStyle(color: Colors.black54),
-            ),
-            const SizedBox(height: 20),
-
-            // Permission Request UI
-            Card(
-              child: ListTile(
-                title: const Text('Permisos de Notificación'),
-                subtitle: Text(
-                  _isPermissionGranted
-                      ? 'Permisos: Concedidos'
-                      : 'Permisos: No solicitados',
-                ),
-                trailing: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _isPermissionGranted = !_isPermissionGranted;
-                    });
-                  },
-                  child: Text(_isPermissionGranted ? 'Revocar' : 'Solicitar'),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Token display UI
-            const Text(
-              'FCM Token del Dispositivo:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            SelectableText(
-              _mockToken,
-              style: const TextStyle(
-                fontFamily: 'monospace',
-                backgroundColor: Color(0xFFF1F5F9),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Simulate notification action
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Mensajes Recibidos:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                ElevatedButton(
-                  onPressed: _simulateIncomingNotification,
-                  child: const Text('Simular Recepción'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-
-            if (_notifications.isEmpty)
-              const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text('No hay mensajes en la lista.'),
-                ),
-              )
-            else
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _notifications.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.message, color: Colors.blue),
-                      title: Text(_notifications[index]),
-                    ),
-                  );
-                },
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/*
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../services/notification_service.dart';
@@ -195,7 +69,7 @@ class _FcmScreenState extends State<FcmScreen> {
 
   // Solicita permisos nativos de notificación
   Future<void> _requestPermissions() async {
-    final granted = await _notificationService.requestPermissions();
+    final granted = await _notificationService.requestPermission();
     setState(() {
       _isPermissionGranted = granted;
     });
@@ -212,12 +86,15 @@ class _FcmScreenState extends State<FcmScreen> {
     final String tokenStatus;
     if (_notificationService.fcmToken != null) {
       tokenStatus = _notificationService.fcmToken!;
-    } else if (_notificationService.initializationError != null) {
-      tokenStatus = 'Error al inicializar Firebase:\n${_notificationService.initializationError}';
-    } else if (_notificationService.isFirebaseInitialized) {
-      tokenStatus = 'Firebase inicializado con éxito, pero no se pudo obtener el FCM Token.\n\nDiagnóstico: Verifica que tu emulador o dispositivo tenga conexión a Internet activa y cuente con Google Play Services instalados y actualizados.';
+    } else if (_notificationService.initializedError != null) {
+      tokenStatus =
+          'Error al inicializar Firebase:\n${_notificationService.initializedError}';
+    } else if (_notificationService.isFirebassInitialized) {
+      tokenStatus =
+          'Firebase inicializado con éxito, pero no se pudo obtener el FCM Token.\n\nDiagnóstico: Verifica que tu emulador o dispositivo tenga conexión a Internet activa y cuente con Google Play Services instalados y actualizados.';
     } else {
-      tokenStatus = 'Firebase no inicializado. Asegúrate de colocar tu archivo google-services.json en android/app/ y compilar la app desde cero.';
+      tokenStatus =
+          'Firebase no inicializado. Asegúrate de colocar tu archivo google-services.json en android/app/ y compilar la app desde cero.';
     }
 
     return Scaffold(
@@ -292,5 +169,3 @@ class _FcmScreenState extends State<FcmScreen> {
     );
   }
 }
-
-*/

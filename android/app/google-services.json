@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "902641372751",
+    "project_id": "uide-43a9f",
+    "storage_bucket": "uide-43a9f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902641372751:android:854685aa95078b924f243a",
+        "android_client_info": {
+          "package_name": "com.torneoexpress.torneo_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH4kAHa8Kee45ZKIjNKCUSpOOF-4urCmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902641372751:android:94c53b03c83154624f243a",
+        "android_client_info": {
+          "package_name": "ec.edu.uide.s9_clase_20260410"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH4kAHa8Kee45ZKIjNKCUSpOOF-4urCmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902641372751:android:1318c92b0b502dbb4f243a",
+        "android_client_info": {
+          "package_name": "ec.edu.uide.s9_clase_20260410_2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH4kAHa8Kee45ZKIjNKCUSpOOF-4urCmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
