@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:go_router/go_router.dart';
-import '../../services/map_service.dart';        // Importar la capa de datos/servicio del mapa
-import 'widgets/map_view_widget.dart';        // Importar la vista modularizada del mapa
+import '../../services/map_service.dart'; // Importar la capa de datos/servicio del mapa
+import 'widgets/map_view_widget.dart'; // Importar la vista modularizada del mapa
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -126,7 +126,8 @@ class _MapScreenState extends State<MapScreen> {
             Expanded(
               child: MapViewWidget(
                 mapController: _mapController,
-                center: MapService.uideCoordinates, // Consumido desde MapService
+                center:
+                    MapService.uideCoordinates, // Consumido desde MapService
                 zoom: _zoomLevel,
                 tileUrl: _currentTileUrl,
                 onPositionChanged: (camera, hasGesture) {
@@ -138,14 +139,15 @@ class _MapScreenState extends State<MapScreen> {
                 },
                 markers: [
                   Marker(
-                    point: MapService.uideCoordinates, // Consumido desde MapService
+                    point: MapService
+                        .uideCoordinates, // Consumido desde MapService
                     width: 60,
                     height: 60,
                     child: GestureDetector(
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('¡Bienvenido al Campus UIDE (Quito)!'),
+                            content: Text('¡Bienvenido al Campus UIDE (Loja)!'),
                           ),
                         );
                       },
@@ -165,7 +167,10 @@ class _MapScreenState extends State<MapScreen> {
             Center(
               child: Text(
                 'Nivel de Zoom Actual: ${_zoomLevel.toStringAsFixed(1)}',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
               ),
             ),
             const SizedBox(height: 12),

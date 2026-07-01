@@ -33,11 +33,12 @@ class MapViewWidget extends StatelessWidget {
         child: FlutterMap(
           mapController: mapController,
           options: MapOptions(
-            initialCenter: center,      // Coordenada inicial de centrado
-            initialZoom: zoom,          // Zoom inicial
+            initialCenter: center, // Coordenada inicial de centrado
+            initialZoom: zoom, // Zoom inicial
             minZoom: 3.0,
             maxZoom: 18.0,
-            onPositionChanged: onPositionChanged, // Evento de cambio de posición (zoom/arrastre)
+            onPositionChanged:
+                onPositionChanged, // Evento de cambio de posición (zoom/arrastre)
           ),
           children: [
             // Capa 1: Mosaico de fondo (TileLayer)
@@ -46,10 +47,7 @@ class MapViewWidget extends StatelessWidget {
               userAgentPackageName: 'ec.edu.uide.s9_clase_20260410',
             ),
             // Capa 2: Dibujo de marcadores/pines en el mapa (MarkerLayer)
-            if (markers.isNotEmpty)
-              MarkerLayer(
-                markers: markers,
-              ),
+            if (markers.isNotEmpty) MarkerLayer(markers: markers),
           ],
         ),
       ),
