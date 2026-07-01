@@ -3,6 +3,7 @@ import '../screens/home/home_screen.dart';
 import '../screens/sqlite/sqlite_screen.dart';
 import '../screens/fcm/fcm_screen.dart';
 import '../screens/map/map_screen.dart';
+import '../screens/map/advanced_map_screen.dart';
 import '../screens/minio/minio_screen.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -27,6 +28,11 @@ final GoRouter appRouter = GoRouter(
       path: '/map',
       name: 'map',
       builder: (context, state) => const MapScreen(),
+    ),
+    GoRoute(
+      path: '/map-advanced',
+      name: 'map-advanced',
+      builder: (context, state) => const AdvancedMapScreen(),
     ),
     GoRoute(
       path: '/minio',

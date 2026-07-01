@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:go_router/go_router.dart';
 import '../../services/map_service.dart';        // Importar la capa de datos/servicio del mapa
 import 'widgets/map_view_widget.dart';        // Importar la vista modularizada del mapa
 
@@ -61,6 +62,13 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Módulo Mapas (flutter_map)'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.explore),
+            tooltip: 'Mapa Avanzado',
+            onPressed: () => context.push('/map-advanced'),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

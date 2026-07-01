@@ -48,6 +48,14 @@ class HomeScreen extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
+            leading: const Icon(Icons.explore, color: Colors.indigo),
+            title: const Text('Mapa Avanzado (Rutas e Interactividad)'),
+            subtitle: const Text('Rutas, simulación de trayectos, capas y geocercas'),
+            trailing: const Icon(Icons.arrow_forward),
+            onTap: () => context.push('/map-advanced'),
+          ),
+          const Divider(),
+          ListTile(
             leading: const Icon(Icons.cloud_upload, color: Colors.pink),
             title: const Text('Conectarse a un Servidor MinIO'),
             subtitle: const Text('Subida y descarga de archivos'),

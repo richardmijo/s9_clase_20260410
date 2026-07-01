@@ -3,7 +3,7 @@ import 'package:latlong2/latlong.dart';
 // Capa de Datos / Servicio: Abstrae la configuración, coordenadas y lógica del mapa
 // fuera de las pantallas (Presentation Layer) siguiendo principios de Arquitectura Limpia.
 class MapService {
-  // Coordenadas predeterminadas (Campus UIDE en Quito)
+  // Coordenadas predeterminadas (Campus UIDE en Loja)
   static const LatLng uideCoordinates = LatLng(-3.9721857, -79.1992771);
 
   // Mosaicos (Tiles) disponibles para el mapa
