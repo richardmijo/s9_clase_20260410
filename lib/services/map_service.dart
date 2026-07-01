@@ -4,14 +4,19 @@ import 'package:latlong2/latlong.dart';
 // fuera de las pantallas (Presentation Layer) siguiendo principios de Arquitectura Limpia.
 class MapService {
   // Coordenadas predeterminadas (Campus UIDE en Quito)
-  static const LatLng uideCoordinates = LatLng(-0.2095, -78.4358);
+  static const LatLng uideCoordinates = LatLng(-3.9721857, -79.1992771);
 
   // Mosaicos (Tiles) disponibles para el mapa
   static const Map<String, String> mapStyles = {
-    'Estándar (OpenStreetMap)': 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    'Claro (CartoDB Positron - Grayscale)': 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+    'Estándar (OpenStreetMap)':
+        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    'Claro (CartoDB Positron - Grayscale)':
+        'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
     'Colorido (OSM Hot)': 'https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-    'Oscuro (CartoDB Dark Matter)': 'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+    'Oscuro (CartoDB Dark Matter)':
+        'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+    'Satelital (Esri World Imagery)':
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   };
 
   // Retorna la URL del mosaico por defecto
