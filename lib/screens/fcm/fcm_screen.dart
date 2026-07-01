@@ -27,6 +27,15 @@ class _FcmScreenState extends State<FcmScreen> {
         _showNotificationDialog(message);
       }
     });
+
+    // Reintentar obtener el token si es nulo (por si el internet falló al iniciar la app)
+    if (_notificationService.fcmToken == null) {
+      _notificationService.getFcmToken().then((_) {
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    }
   }
 
   @override
@@ -69,7 +78,7 @@ class _FcmScreenState extends State<FcmScreen> {
 
   // Solicita permisos nativos de notificación
   Future<void> _requestPermissions() async {
-    final granted = await _notificationService.requestPermission();
+    final granted = await _notificationService.requestPermissions();
     setState(() {
       _isPermissionGranted = granted;
     });
@@ -86,15 +95,12 @@ class _FcmScreenState extends State<FcmScreen> {
     final String tokenStatus;
     if (_notificationService.fcmToken != null) {
       tokenStatus = _notificationService.fcmToken!;
-    } else if (_notificationService.initializedError != null) {
-      tokenStatus =
-          'Error al inicializar Firebase:\n${_notificationService.initializedError}';
-    } else if (_notificationService.isFirebassInitialized) {
-      tokenStatus =
-          'Firebase inicializado con éxito, pero no se pudo obtener el FCM Token.\n\nDiagnóstico: Verifica que tu emulador o dispositivo tenga conexión a Internet activa y cuente con Google Play Services instalados y actualizados.';
+    } else if (_notificationService.initializationError != null) {
+      tokenStatus = 'Error al inicializar Firebase:\n${_notificationService.initializationError}';
+    } else if (_notificationService.isFirebaseInitialized) {
+      tokenStatus = 'Firebase inicializado con éxito, pero no se pudo obtener el FCM Token.\n\nDiagnóstico: Verifica que tu emulador o dispositivo tenga conexión a Internet activa y cuente con Google Play Services instalados y actualizados.';
     } else {
-      tokenStatus =
-          'Firebase no inicializado. Asegúrate de colocar tu archivo google-services.json en android/app/ y compilar la app desde cero.';
+      tokenStatus = 'Firebase no inicializado. Asegúrate de colocar tu archivo google-services.json en android/app/ y compilar la app desde cero.';
     }
 
     return Scaffold(
@@ -151,6 +157,22 @@ class _FcmScreenState extends State<FcmScreen> {
                 style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
               ),
             ),
+            
+            if (_notificationService.fcmToken == null) ...[
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () async {
+                    setState(() {});
+                    await _notificationService.getFcmToken();
+                    setState(() {});
+                  },
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Reintentar obtener FCM Token'),
+                ),
+              ),
+            ],
             const SizedBox(height: 24),
 
             // Botón de Simulación de Diálogo
