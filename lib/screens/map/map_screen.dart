@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart'; // Importar biblioteca flutter_map
 import 'package:latlong2/latlong.dart';       // Importar biblioteca latlong2 para coordenadas LatLng
+import 'widgets/map_view_widget.dart';        // Importar nuestro widget personalizado de mapa
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -134,64 +135,41 @@ class _MapScreenState extends State<MapScreen> {
             ),
             const SizedBox(height: 16),
 
-            // Contenedor principal que renderiza el Mapa real de FlutterMap
+            // Contenedor principal que renderiza el Mapa real reutilizando MapViewWidget
             Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blue.shade200, width: 2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: FlutterMap(
-                    mapController: _mapController,
-                    options: MapOptions(
-                      initialCenter: _uideCoords, // Punto de inicio
-                      initialZoom: _zoomLevel,    // Zoom de inicio
-                      minZoom: 3.0,
-                      maxZoom: 18.0,
-                      onPositionChanged: (position, hasGesture) {
-                        if (hasGesture) {
-                          setState(() {
-                            _zoomLevel = position.zoom;
-                          });
-                        }
-                      },
-                    ),
-                    children: [
-                      // 1. Capa de Mosaicos (Carga el mapa visual de fondo)
-                      TileLayer(
-                        urlTemplate: _currentTileUrl, // URL del servidor de mapas
-                        userAgentPackageName: 'ec.edu.uide.s9_clase_20260410', // Identificación obligatoria
-                      ),
-
-                      // 2. Capa de Marcadores (Puntos/Pines de geolocalización)
-                      MarkerLayer(
-                        markers: [
-                          Marker(
-                            point: _uideCoords,
-                            width: 60,
-                            height: 60,
-                            child: GestureDetector(
-                              onTap: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('¡Bienvenido al Campus UIDE (Quito)!'),
-                                  ),
-                                );
-                              },
-                              child: const Icon(
-                                Icons.location_on,
-                                color: Colors.red,
-                                size: 40,
-                              ),
-                            ),
+              child: MapViewWidget(
+                mapController: _mapController,
+                center: _uideCoords,
+                zoom: _zoomLevel,
+                tileUrl: _currentTileUrl,
+                onPositionChanged: (camera, hasGesture) {
+                  if (hasGesture) {
+                    setState(() {
+                      _zoomLevel = camera.zoom;
+                    });
+                  }
+                },
+                markers: [
+                  Marker(
+                    point: _uideCoords,
+                    width: 60,
+                    height: 60,
+                    child: GestureDetector(
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('¡Bienvenido al Campus UIDE (Quito)!'),
                           ),
-                        ],
+                        );
+                      },
+                      child: const Icon(
+                        Icons.location_on,
+                        color: Colors.red,
+                        size: 40,
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
             const SizedBox(height: 12),
