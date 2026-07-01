@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart'; // Importar biblioteca flutter_map
-import 'package:latlong2/latlong.dart';       // Importar biblioteca latlong2 para coordenadas LatLng
-import 'widgets/map_view_widget.dart';        // Importar nuestro widget personalizado de mapa
+import 'package:flutter_map/flutter_map.dart';
+import '../../services/map_service.dart';        // Importar la capa de datos/servicio del mapa
+import 'widgets/map_view_widget.dart';        // Importar la vista modularizada del mapa
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -11,35 +11,14 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  // Controlador del mapa para realizar acciones por código (como mover o hacer zoom)
+  // Controlador para mover o enfocar el mapa por código
   late final MapController _mapController;
 
-  // Coordenadas geográficas del Campus UIDE (Quito, Ecuador)
-  final LatLng _uideCoords = const LatLng(-0.2095, -78.4358);
-
-  // Zoom inicial del mapa
+  // Zoom dinámico controlado en pantalla
   double _zoomLevel = 15.0;
 
-  // URL base de los mosaicos del mapa. Por defecto usamos OpenStreetMap.
-  String _currentTileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-
-  /*
-   * EXPLICACIÓN PEDAGÓGICA PARA CLASE:
-   * Los mapas en flutter_map se cargan en cuadritos o imágenes llamadas "tiles" (mosaicos).
-   * La URL del servidor contiene 3 variables obligatorias:
-   * - {z}: Zoom actual.
-   * - {x}: Posición horizontal del mosaico.
-   * - {y}: Posición vertical del mosaico.
-   *
-   * Aquí definimos diferentes servidores/estilos para que los estudiantes vean
-   * cómo cambia el aspecto del mapa cambiando una sola URL.
-   */
-  final Map<String, String> _mapStyles = {
-    'Estándar (OpenStreetMap)': 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-    'Claro (CartoDB Positron - ¡Ideal para proyectores!)': 'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-    'Colorido (OSM Hot)': 'https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-    'Oscuro (CartoDB Dark Matter)': 'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-  };
+  // URL del mosaico actual consumida desde MapService
+  String _currentTileUrl = MapService.getDefaultTileUrl();
 
   @override
   void initState() {
@@ -53,15 +32,15 @@ class _MapScreenState extends State<MapScreen> {
     super.dispose();
   }
 
-  // Mueve la cámara y el zoom al campus de la UIDE
+  // Mueve la cámara y el zoom al campus de la UIDE consumiendo MapService
   void _centerOnUIDE() {
-    _mapController.move(_uideCoords, 16.0);
+    _mapController.move(MapService.uideCoordinates, 16.0);
     setState(() {
       _zoomLevel = 16.0;
     });
   }
 
-  // Incrementa el zoom actual mediante código
+  // Acerca el mapa mediante código
   void _zoomIn() {
     if (_zoomLevel < 18.0) {
       _zoomLevel += 1.0;
@@ -69,7 +48,7 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  // Reduce el zoom actual mediante código
+  // Aleja el mapa mediante código
   void _zoomOut() {
     if (_zoomLevel > 3.0) {
       _zoomLevel -= 1.0;
@@ -99,7 +78,7 @@ class _MapScreenState extends State<MapScreen> {
             ),
             const SizedBox(height: 12),
 
-            // Selector del estilo/tipo de mapa
+            // Selector del estilo/tipo de mapa consumiendo los estilos del MapService
             Row(
               children: [
                 const Icon(Icons.layers, color: Colors.blue),
@@ -113,7 +92,7 @@ class _MapScreenState extends State<MapScreen> {
                   child: DropdownButton<String>(
                     value: _currentTileUrl,
                     isExpanded: true,
-                    items: _mapStyles.entries.map((entry) {
+                    items: MapService.mapStyles.entries.map((entry) {
                       return DropdownMenuItem<String>(
                         value: entry.value,
                         child: Text(
@@ -139,7 +118,7 @@ class _MapScreenState extends State<MapScreen> {
             Expanded(
               child: MapViewWidget(
                 mapController: _mapController,
-                center: _uideCoords,
+                center: MapService.uideCoordinates, // Consumido desde MapService
                 zoom: _zoomLevel,
                 tileUrl: _currentTileUrl,
                 onPositionChanged: (camera, hasGesture) {
@@ -151,7 +130,7 @@ class _MapScreenState extends State<MapScreen> {
                 },
                 markers: [
                   Marker(
-                    point: _uideCoords,
+                    point: MapService.uideCoordinates, // Consumido desde MapService
                     width: 60,
                     height: 60,
                     child: GestureDetector(
@@ -174,7 +153,7 @@ class _MapScreenState extends State<MapScreen> {
             ),
             const SizedBox(height: 12),
 
-            // Mostrar el nivel de zoom actual para los estudiantes
+            // Mostrar el nivel de zoom actual
             Center(
               child: Text(
                 'Nivel de Zoom Actual: ${_zoomLevel.toStringAsFixed(1)}',
