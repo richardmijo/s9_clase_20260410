@@ -37,7 +37,11 @@ class NotificationService {
     try {
       await Firebase.initializeApp();
       _isFirebasInitialized = true;
+
+      // aqui el error
+      /// revisar
       _messaging = FirebaseMessaging.instance;
+
       debugPrint("Firebase se inicializó con éxito");
 
       // Registro de halder para las notificaciones en segundo plano
