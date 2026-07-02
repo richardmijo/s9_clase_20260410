@@ -1,6 +1,5 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart' as fp;
 import 'package:path_provider/path_provider.dart';
 import '../../services/minio_service.dart';
 
@@ -98,7 +97,7 @@ class _MinioScreenState extends State<MinioScreen> {
   // Permite seleccionar un archivo real usando file_picker
   Future<void> _selectFile() async {
     try {
-      final result = await FilePicker.platform.pickFiles();
+      final result = await fp.FilePicker.pickFiles();
       if (result != null && result.files.single.path != null) {
         setState(() {
           _selectedFileName = result.files.single.name;
