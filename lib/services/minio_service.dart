@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:minio/minio.dart';
 import 'package:minio/io.dart';
 
@@ -69,6 +70,12 @@ class MinioService {
   Future<void> downloadFile(String objectName, String localSavePath) async {
     if (_minio == null) throw Exception('MinIO Client no inicializado');
     try {
+      // Eliminar archivo local si ya existe para evitar conflictos de reintento de rango de bytes (416 Range Not Satisfiable)
+      final localFile = File(localSavePath);
+      if (await localFile.exists()) {
+        await localFile.delete();
+      }
+
       await _minio!.fGetObject(_bucketName, objectName, localSavePath);
     } catch (e) {
       print('Error downloading file: $e');
