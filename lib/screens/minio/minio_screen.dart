@@ -17,7 +17,9 @@ class _MinioScreenState extends State<MinioScreen> {
   // Controladores de texto para credenciales
   final _endpointController = TextEditingController(text: 's3.uidehub.tech');
   final _accessKeyController = TextEditingController(text: 'admin_uidehub');
-  final _secretKeyController = TextEditingController();
+  final _secretKeyController = TextEditingController(
+    text: 'gOggAJFliVtNFlX7aibcb/MCaVrpN/cQtLkUMPLaUlU=',
+  );
   final _bucketController = TextEditingController(text: 'pruebas');
 
   bool _isUploading = false;
@@ -49,7 +51,9 @@ class _MinioScreenState extends State<MinioScreen> {
   void _connectMinio() {
     if (_secretKeyController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor, ingresa tu clave secreta de MinIO.')),
+        const SnackBar(
+          content: Text('Por favor, ingresa tu clave secreta de MinIO.'),
+        ),
       );
       return;
     }
@@ -66,9 +70,9 @@ class _MinioScreenState extends State<MinioScreen> {
       );
       _refreshFiles();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al conectar: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error al conectar: $e')));
     }
   }
 
@@ -83,9 +87,9 @@ class _MinioScreenState extends State<MinioScreen> {
         _serverFiles = files;
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al obtener archivos: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error al obtener archivos: $e')));
     } finally {
       setState(() => _isLoadingFiles = false);
     }
@@ -112,7 +116,9 @@ class _MinioScreenState extends State<MinioScreen> {
   Future<void> _uploadFile() async {
     if (_selectedFileName == null || _selectedFilePath == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor, selecciona un archivo primero.')),
+        const SnackBar(
+          content: Text('Por favor, selecciona un archivo primero.'),
+        ),
       );
       return;
     }
@@ -121,7 +127,9 @@ class _MinioScreenState extends State<MinioScreen> {
     try {
       await _minioService.uploadFile(_selectedFileName!, _selectedFilePath!);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('¡Archivo subido exitosamente a MinIO VPS!')),
+        const SnackBar(
+          content: Text('¡Archivo subido exitosamente a MinIO VPS!'),
+        ),
       );
       setState(() {
         _selectedFileName = null;
@@ -129,9 +137,9 @@ class _MinioScreenState extends State<MinioScreen> {
       });
       _refreshFiles(); // Refrescar lista
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al subir archivo: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error al subir archivo: $e')));
     } finally {
       setState(() => _isUploading = false);
     }
@@ -152,9 +160,9 @@ class _MinioScreenState extends State<MinioScreen> {
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al descargar archivo: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error al descargar archivo: $e')));
     }
   }
 
@@ -167,9 +175,9 @@ class _MinioScreenState extends State<MinioScreen> {
       );
       _refreshFiles();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al eliminar archivo: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error al eliminar archivo: $e')));
     }
   }
 
@@ -263,7 +271,10 @@ class _MinioScreenState extends State<MinioScreen> {
                   child: Text(
                     'Ingresa las credenciales de tu VPS de MinIO arriba para habilitar la subida y descarga de archivos.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.black54, fontStyle: FontStyle.italic),
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
                 ),
               ),
@@ -298,7 +309,9 @@ class _MinioScreenState extends State<MinioScreen> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: _selectedFileName != null ? Colors.blue.shade900 : Colors.black54,
+                            color: _selectedFileName != null
+                                ? Colors.blue.shade900
+                                : Colors.black54,
                           ),
                         ),
                       ),
@@ -306,12 +319,17 @@ class _MinioScreenState extends State<MinioScreen> {
                       if (_isUploading) ...[
                         const CircularProgressIndicator(),
                         const SizedBox(height: 12),
-                        const Text('Subiendo archivo a la VPS...', style: TextStyle(fontStyle: FontStyle.italic)),
+                        const Text(
+                          'Subiendo archivo a la VPS...',
+                          style: TextStyle(fontStyle: FontStyle.italic),
+                        ),
                       ] else
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton.icon(
-                            onPressed: _selectedFileName == null ? null : _uploadFile,
+                            onPressed: _selectedFileName == null
+                                ? null
+                                : _uploadFile,
                             icon: const Icon(Icons.cloud_upload),
                             label: const Text('Subir Archivo'),
                           ),
@@ -366,7 +384,10 @@ class _MinioScreenState extends State<MinioScreen> {
 
                     return Card(
                       child: ListTile(
-                        leading: const Icon(Icons.insert_drive_file, color: Colors.blue),
+                        leading: const Icon(
+                          Icons.insert_drive_file,
+                          color: Colors.blue,
+                        ),
                         title: Text(
                           name,
                           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -376,7 +397,10 @@ class _MinioScreenState extends State<MinioScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.download, color: Colors.blue),
+                              icon: const Icon(
+                                Icons.download,
+                                color: Colors.blue,
+                              ),
                               onPressed: () => _downloadFile(name),
                               tooltip: 'Descargar',
                             ),
