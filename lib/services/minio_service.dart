@@ -71,7 +71,7 @@ class MinioService {
     if (_minio == null) throw Exception('MinIO Client no inicializado');
     try {
       // 1. Obtener el flujo de bytes desde MinIO usando getObject (evita bug de fGetObject en archivos > 5MB)
-      final Stream<List<int>> stream = await _minio!.getObject(_bucketName, objectName);
+      final stream = await _minio!.getObject(_bucketName, objectName);
 
       // 2. Eliminar archivo local si ya existe para asegurar una descarga limpia
       final localFile = File(localSavePath);
@@ -79,10 +79,8 @@ class MinioService {
         await localFile.delete();
       }
 
-      // 3. Escribir el flujo de bytes en el archivo local de forma eficiente
-      final IOSink sink = localFile.openWrite();
-      await sink.addStream(stream);
-      await sink.close();
+      // 3. Escribir el flujo de bytes en el archivo local usando pipe
+      await stream.pipe(localFile.openWrite());
     } catch (e) {
       print('Error downloading file via stream: $e');
       rethrow;
