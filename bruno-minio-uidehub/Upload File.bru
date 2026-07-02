@@ -1,0 +1,23 @@
+meta {
+  name: Upload File
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/{{bucket}}/{{object_name}}
+  body: text
+  auth: awsv4
+}
+
+body:text {
+  Contenido de prueba subido desde la colección de Bruno.
+}
+
+auth:awsv4 {
+  accessKeyId: {{access_key}}
+  secretAccessKey: {{secret_key}}
+  sessionToken: 
+  service: s3
+  region: us-east-1
+}

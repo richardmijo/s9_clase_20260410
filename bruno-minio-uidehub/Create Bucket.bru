@@ -1,0 +1,19 @@
+meta {
+  name: Create Bucket
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{base_url}}/{{bucket}}
+  body: none
+  auth: awsv4
+}
+
+auth:awsv4 {
+  accessKeyId: {{access_key}}
+  secretAccessKey: {{secret_key}}
+  sessionToken: 
+  service: s3
+  region: us-east-1
+}
