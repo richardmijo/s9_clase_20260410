@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart' as fp;
 import 'package:path_provider/path_provider.dart';
@@ -27,6 +28,8 @@ class _MinioScreenState extends State<MinioScreen> {
   String? _selectedFilePath;
 
   List<Map<String, dynamic>> _serverFiles = [];
+  String? _previewPath;
+  String? _previewType;
 
   @override
   void initState() {
@@ -151,6 +154,31 @@ class _MinioScreenState extends State<MinioScreen> {
       final localSavePath = '${directory.path}/$objectName';
 
       await _minioService.downloadFile(objectName, localSavePath);
+
+      // Identificar extensión para la vista previa
+      final lowerName = objectName.toLowerCase();
+      if (lowerName.endsWith('.png') ||
+          lowerName.endsWith('.jpg') ||
+          lowerName.endsWith('.jpeg') ||
+          lowerName.endsWith('.gif') ||
+          lowerName.endsWith('.webp')) {
+        setState(() {
+          _previewPath = localSavePath;
+          _previewType = 'image';
+        });
+      } else if (lowerName.endsWith('.mp4') ||
+          lowerName.endsWith('.mov') ||
+          lowerName.endsWith('.avi')) {
+        setState(() {
+          _previewPath = localSavePath;
+          _previewType = 'video';
+        });
+      } else {
+        setState(() {
+          _previewPath = null;
+          _previewType = null;
+        });
+      }
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -338,6 +366,76 @@ class _MinioScreenState extends State<MinioScreen> {
                 ),
               ),
               const SizedBox(height: 24),
+
+              if (_previewPath != null) ...[
+                const Text(
+                  'Vista Previa del Archivo Descargado:',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Card(
+                  elevation: 3,
+                  color: Colors.blue.shade50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      children: [
+                        if (_previewType == 'image') ...[
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.file(
+                              File(_previewPath!),
+                              height: 180,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                        ] else if (_previewType == 'video') ...[
+                          const Icon(
+                            Icons.video_library,
+                            size: 64,
+                            color: Colors.blue,
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            '¡Video Descargado con Éxito!',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                        ],
+                        Text(
+                          'Guardado localmente en:\n$_previewPath',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.blue.shade900,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        TextButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              _previewPath = null;
+                              _previewType = null;
+                            });
+                          },
+                          icon: const Icon(Icons.close, color: Colors.red),
+                          label: const Text(
+                            'Cerrar Vista Previa',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
 
               // Listado de archivos en el bucket
               const Text(
